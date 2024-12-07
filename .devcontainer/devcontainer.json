@@ -1,0 +1,31 @@
+{
+	"dockerFile": "Dockerfile",
+	"build": {
+		"args": {
+			"WORKSPACE": "${containerWorkspaceFolder}"
+		}
+	},
+	"remoteUser": "root",
+	"containerEnv": {
+		"ZEPHYR_BASE": "${containerWorkspaceFolder}/zephyr"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools",
+				"ms-vscode.cmake-tools"
+			],
+			"settings": {
+				"terminal.integrated.profiles.linux": {
+					"bash": {
+						"path": "bash"
+					}
+				},
+				"terminal.integrated.defaultProfile.linux": "bash"
+			}
+		}
+	},
+	"runArgs": [
+
+	]
+}
