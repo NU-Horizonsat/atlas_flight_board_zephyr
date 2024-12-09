@@ -1,38 +1,39 @@
 #include <zephyr/kernel.h>
 #include <zephyr/sys/printk.h>
-#include <zephyr/sys/util.h>
-#include <string.h>
-#include <zephyr/usb/usb_device.h>
-#include <zephyr/drivers/uart.h>
+#include <zephyr/logging/log.h>
+#include <zephyr/kernel/stats.h>
+#include "usb_serial.h"
+#include "lora_radio.h"
+#include "sensor.h"
+LOG_MODULE_REGISTER(main);
 
-static const struct device *usb_device;
+#define USB_STACK_SIZE 1024
+#define LORA_STACK_SIZE 1024
+#define SENSOR_STACK_SIZE 1024
 
-static int serial_init(void)
-{
-    uint32_t dtr = 0;
+K_THREAD_STACK_DEFINE(usb_stack_area, USB_STACK_SIZE);
+K_THREAD_STACK_DEFINE(lora_stack_area, LORA_STACK_SIZE);
+K_THREAD_STACK_DEFINE(sensor_stack_area, SENSOR_STACK_SIZE);
 
-    usb_device = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
+struct k_thread usb_thread_data;
+struct k_thread lora_thread_data;
+struct k_thread sensor_thread_data;
 
-    if (usb_enable(NULL) != 0) {
-        return -1;
-    }
-
-    while (!dtr) {
-        uart_line_ctrl_get(usb_device, UART_LINE_CTRL_DTR, &dtr);
-        k_sleep(K_MSEC(100));
-    }
-
-    return 0;
-}
 
 void main(void)
 {
-    if (serial_init() != 0) {
-        return;
-    }
+    printk("Starting main loop with threads...\n");
+
+    k_thread_create(&usb_thread_data, usb_stack_area, K_THREAD_STACK_SIZEOF(usb_stack_area),
+                    usb_serial_thread, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
+
+    k_thread_create(&lora_thread_data, lora_stack_area, K_THREAD_STACK_SIZEOF(lora_stack_area),
+                    lora_radio_thread, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
+
+    k_thread_create(&sensor_thread_data, sensor_stack_area, K_THREAD_STACK_SIZEOF(sensor_stack_area),
+                    sensor_thread, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
 
     while (1) {
-        printk("Hello space\n");
-        k_sleep(K_MSEC(1000));
+        k_sleep(K_FOREVER);
     }
 }

@@ -1,10 +1,5 @@
 {
-	"dockerFile": "Dockerfile",
-	"build": {
-		"args": {
-			"WORKSPACE": "${containerWorkspaceFolder}"
-		}
-	},
+	"image": "ghcr.io/nu-horizonsat/zephyr-docker:main",
 	"remoteUser": "root",
 	"containerEnv": {
 		"ZEPHYR_BASE": "${containerWorkspaceFolder}/zephyr"
