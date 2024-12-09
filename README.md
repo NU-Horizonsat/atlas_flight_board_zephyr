@@ -20,7 +20,7 @@ west zephyr-export
 cd /apps/atlas_flight_board
 west build -p auto -b rpi_pico
 ```
-5. Copy the generated uf2 file to the Raspberry Pi Pico
+5. Copy the generated uf2 file to the flight board
 
 ### Using the development container
 1. Clone the project
@@ -43,6 +43,6 @@ cd /apps/atlas_flight_board
 west build -p auto -b rpi_pico
 ```
 
-5. Copy the generated uf2 file to the Raspberry Pi Pico
+5. Copy the generated uf2 file to the flight board
 
 ##### You can also install the Zephyr SDK and west tool by following the instructions in the [official documentation](https://docs.zephyrproject.org/latest/getting_started/index.html) or using the Zephyr IDE extension in VSCode by follow this [guide](https://github.com/mylonics/zephyr-ide/blob/main/docs/MANUAL.md).
