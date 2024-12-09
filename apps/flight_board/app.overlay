@@ -42,14 +42,6 @@
 	};
 };
 
-&pinctrl {
-	i2c1_default: i2c1_default {
-		group1 {
-			pinmux = <I2C1_SCL_P3>, <I2C1_SDA_P2>;
-		};
-	};
-};
-
 &i2c1 {
     status = "okay";
     pinctrl-0 = <&i2c1_default>;
@@ -61,9 +53,17 @@
         label = "LSM6DSO";
     };
 
-    lsm303dlhc_magn: lsm303dlhc_magn@1e {
-        compatible = "st,lsm303dlhc-magn";
+    lis2mdl: lis2mdl@1e {
+        compatible = "st,lis2mdl";
         reg = <0x1e>;
-        label = "LSM303DLHC_MAGN";
+        label = "LIS2MDL";
     };
+};
+
+&pinctrl {
+	i2c1_default: i2c1_default {
+		group1 {
+			pinmux = <I2C1_SCL_P3>, <I2C1_SDA_P2>;
+		};
+	};
 };
