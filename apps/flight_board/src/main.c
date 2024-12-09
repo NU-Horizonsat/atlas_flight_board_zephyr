@@ -34,6 +34,7 @@ void main(void)
                     sensor_thread, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
 
     while (1) {
+k
         k_sleep(K_FOREVER);
     }
 }
