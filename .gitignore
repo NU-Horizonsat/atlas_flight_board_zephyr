@@ -107,3 +107,7 @@ SphinxLint.txt
 TextEncoding.txt
 YAMLLint.txt
 .west
+zephyr
+module
+tools
+bootloader
