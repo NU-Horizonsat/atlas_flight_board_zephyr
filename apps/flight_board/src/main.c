@@ -1,7 +1,9 @@
 #include <zephyr/kernel.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/logging/log.h>
-#include <zephyr/kernel/stats.h>
+#include <zephyr/shell/shell.h>
+#include <zephyr/device.h>
+#include <zephyr/drivers/flash.h>
 #include "usb_serial.h"
 #include "lora_radio.h"
 #include "sensor.h"
@@ -33,7 +35,5 @@ void main(void)
     k_thread_create(&sensor_thread_data, sensor_stack_area, K_THREAD_STACK_SIZEOF(sensor_stack_area),
                     sensor_thread, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
 
-    while (1) {
-        k_sleep(K_FOREVER);
-    }
+
 }

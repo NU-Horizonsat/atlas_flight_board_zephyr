@@ -77,29 +77,29 @@ void sensor_thread(void *p1, void *p2, void *p3)
         sensor_channel_get(lsm6dso_dev, SENSOR_CHAN_ACCEL_Y, &y);
         sensor_channel_get(lsm6dso_dev, SENSOR_CHAN_ACCEL_Z, &z);
 
-        printk("LSM6DSO accel x: %f ms^2, y: %f ms^2, z: %f ms^2\n",
-               (double)out_ev(&x), (double)out_ev(&y), (double)out_ev(&z));
+        // printk("LSM6DSO accel x: %f ms^2, y: %f ms^2, z: %f ms^2\n",
+        //        (double)out_ev(&x), (double)out_ev(&y), (double)out_ev(&z));
 
         sensor_sample_fetch_chan(lsm6dso_dev, SENSOR_CHAN_GYRO_XYZ);
         sensor_channel_get(lsm6dso_dev, SENSOR_CHAN_GYRO_X, &x);
         sensor_channel_get(lsm6dso_dev, SENSOR_CHAN_GYRO_Y, &y);
         sensor_channel_get(lsm6dso_dev, SENSOR_CHAN_GYRO_Z, &z);
 
-        printk("LSM6DSO gyro x: %f rad/s, y: %f rad/s, z: %f rad/s\n",
-               (double)out_ev(&x), (double)out_ev(&y), (double)out_ev(&z));
+        // printk("LSM6DSO gyro x: %f rad/s, y: %f rad/s, z: %f rad/s\n",
+        //        (double)out_ev(&x), (double)out_ev(&y), (double)out_ev(&z));
 
         sensor_sample_fetch_chan(lis2mdl_dev, SENSOR_CHAN_MAGN_XYZ);
         sensor_channel_get(lis2mdl_dev, SENSOR_CHAN_MAGN_X, &x);
         sensor_channel_get(lis2mdl_dev, SENSOR_CHAN_MAGN_Y, &y);
         sensor_channel_get(lis2mdl_dev, SENSOR_CHAN_MAGN_Z, &z);
 
-        printk("LIS2MDL mag x: %f gauss, y: %f gauss, z: %f gauss\n",
-               (double)out_ev(&x), (double)out_ev(&y), (double)out_ev(&z));
+        // printk("LIS2MDL mag x: %f gauss, y: %f gauss, z: %f gauss\n",
+        //        (double)out_ev(&x), (double)out_ev(&y), (double)out_ev(&z));
 
         sensor_sample_fetch_chan(lsm6dso_dev, SENSOR_CHAN_DIE_TEMP);
         sensor_channel_get(lsm6dso_dev, SENSOR_CHAN_DIE_TEMP, &temp);
 
-        printk("LSM6DSO temperature: %f °C\n", (double)out_ev(&temp));
+        // printk("LSM6DSO temperature: %f °C\n", (double)out_ev(&temp));
 
         k_sleep(K_SECONDS(1));
     }

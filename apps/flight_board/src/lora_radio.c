@@ -48,13 +48,13 @@ void lora_radio_thread(void *p1, void *p2, void *p3)
 
     while (1) {
         snprintf(tx_buf, sizeof(tx_buf), "LoRa %d", tx_counter++);
-        printk("Sending: %s\n", tx_buf);
+        // printk("Sending: %s\n", tx_buf);
 
         ret = lora_send(lora_dev, tx_buf, strlen(tx_buf));
         if (ret < 0) {
             printk("LoRa send failed: %d (errno: %d)\n", ret, errno);
         } else {
-            printk("LoRa send success\n");
+            // printk("LoRa send success\n");
         }
 
         k_sleep(K_SECONDS(5));

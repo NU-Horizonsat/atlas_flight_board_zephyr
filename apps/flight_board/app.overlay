@@ -1,9 +1,8 @@
 / {
 	chosen {
-		zephyr,console = &cdc_acm_uart0;
+		zephyr,shell-uart = &cdc_acm_uart0;
 	};
 };
-
 
 &zephyr_udc0 {
 	cdc_acm_uart0: cdc_acm_uart0 {
@@ -25,7 +24,7 @@
 		dio-gpios = <&gpio0 23 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>, <&gpio0 22 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
 		reset-gpios = <&gpio0 20 GPIO_ACTIVE_LOW>;
 		power-amplifier-output = "pa-boost";
-		label="HOPE_RF";
+		label = "HOPE_RF";
 	};
 };
 
@@ -43,27 +42,75 @@
 };
 
 &i2c1 {
-    status = "okay";
-    pinctrl-0 = <&i2c1_default>;
-    pinctrl-names = "default";
+	status = "okay";
+	pinctrl-0 = <&i2c1_default>;
+	pinctrl-names = "default";
 
-    lsm6dso0: lsm6dso0@6b {
-        compatible = "st,lsm6dso";
-        reg = <0x6b>;
-        label = "LSM6DSO";
-    };
+	lsm6dso0: lsm6dso0@6b {
+		compatible = "st,lsm6dso";
+		reg = <0x6b>;
+		label = "LSM6DSO";
+	};
 
-    lis2mdl: lis2mdl@1e {
-        compatible = "st,lis2mdl";
-        reg = <0x1e>;
-        label = "LIS2MDL";
-    };
+	lis2mdl: lis2mdl@1e {
+		compatible = "st,lis2mdl";
+		reg = <0x1e>;
+		label = "LIS2MDL";
+	};
 };
 
 &pinctrl {
 	i2c1_default: i2c1_default {
 		group1 {
 			pinmux = <I2C1_SCL_P3>, <I2C1_SDA_P2>;
+		};
+	};
+};
+
+&flash0 {
+	reg = <0x10000000 DT_SIZE_M(16)>; // Defines 16 MB flash
+
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		/* Reserved memory for the second stage bootloader */
+		second_stage_bootloader: partition@0 {
+			label = "second_stage_bootloader";
+			reg = <0x00000000 0x100>; // 256 bytes for bootloader
+			read-only;
+		};
+
+		/* Code Partition */
+		code_partition: partition@100 {
+			label = "code_partition";
+			reg = <0x100 (DT_SIZE_M(16) - DT_SIZE_M(15) - 0x100)>; // Code partition after bootloader
+		};
+
+		/* Storage Partition with littlefs */
+		storage_partition: partition@f10000 {
+			label = "storage";
+			reg = <0xF10000 DT_SIZE_M(15)>; // 15 MB for storage starting at the last part
+			compatible = "littlefs"; // Declares compatibility with littlefs
+		};
+	};
+};
+
+/ {
+	fstab {
+		compatible = "zephyr,fstab";
+
+		lfs1: lfs1 {
+			compatible = "zephyr,fstab,littlefs";
+			mount-point = "/lfs";
+			partition = <&storage_partition>;
+			automount;
+			read-size = <16>;
+			prog-size = <16>;
+			cache-size = <64>;
+			lookahead-size = <32>;
+			block-cycles = <512>;
 		};
 	};
 };
