@@ -4,6 +4,7 @@
 #include <zephyr/shell/shell.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/flash.h>
+#include <zephyr/zbus/zbus.h>
 #include "usb_serial.h"
 #include "lora_radio.h"
 #include "sensor.h"
@@ -21,7 +22,6 @@ struct k_thread usb_thread_data;
 struct k_thread lora_thread_data;
 struct k_thread sensor_thread_data;
 
-
 void main(void)
 {
     printk("Starting main loop with threads...\n");
@@ -35,5 +35,12 @@ void main(void)
     k_thread_create(&sensor_thread_data, sensor_stack_area, K_THREAD_STACK_SIZEOF(sensor_stack_area),
                     sensor_thread, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
 
-
+    // while (true) {
+    //     struct sensor_data sensor_data_channel_msg;
+    //     zbus_chan_read(&sensor_data_chan, &sensor_data_channel_msg,K_MSEC(500));
+    //     printk("Accel: %f %f %f\n", sensor_data_channel_msg.accel_x, sensor_data_channel_msg.accel_y, sensor_data_channel_msg.accel_z);
+    //     printk("Gyro: %f %f %f\n", sensor_data_channel_msg.gyro_x, sensor_data_channel_msg.gyro_y, sensor_data_channel_msg.gyro_z);
+    //     printk("Mag: %f %f %f\n", sensor_data_channel_msg.mag_x, sensor_data_channel_msg.mag_y, sensor_data_channel_msg.mag_z);
+    //     printk("Temp: %f\n", sensor_data_channel_msg.temp);
+    // }
 }
